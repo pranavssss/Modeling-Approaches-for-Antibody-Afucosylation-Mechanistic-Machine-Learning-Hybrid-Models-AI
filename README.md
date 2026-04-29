@@ -1,4 +1,4 @@
-# mAb Fucosylation · ML Pipeline Dashboard
+# Modeling Approaches for Antibody Afucosylation Mechanistic · Hybrid Models · AI · ML Pipeline Dashboard
 
 > **BMS Hackathon** · MS Data Science · Rutgers University × Bristol Myers Squibb  
 > Built with ♥ by **Team Data Minds** — Sanjith Ganesh & Pranav Senthilkumaran
@@ -135,18 +135,6 @@ If `Fucosylation_pct` is not found, the last column is used as the target. Works
 | ANN | Neural network — needs N > 5,000 to work reliably |
 | Hybrid | Auto-engineers physics features from column names |
 
----
-
-## Common Issues
-
-| Problem | Fix |
-|---------|-----|
-| AI report shows only ~40 words | `maxOutputTokens` was too low — already fixed in current `main.py`. Make sure you have the latest version. |
-| "Cannot parse CSV" | Save as plain CSV (not .xlsx). Excel → Save As → CSV. |
-| "All models failed" | Dataset has fewer than 20 complete rows after dropping NaN. |
-| Port 8000 in use | `lsof -ti:8000 \| xargs kill` |
-| Port 3000 in use | `lsof -ti:3000 \| xargs kill` |
-| Logo not showing | Put `bms-logo.png` in `frontend/public/` not `frontend/src/`. |
 
 ---
 
@@ -154,7 +142,7 @@ If `Fucosylation_pct` is not found, the last column is used as the target. Works
 
 | Layer | Tools |
 |-------|-------|
-| Backend | FastAPI, scikit-learn, XGBoost, SHAP, SciPy, pandas, httpx |
+| Backend | FastAPI, scikit-learn, XGBoost, SHAP, SciPy, Numpy, Pandas, httpx |
 | Frontend | React 18, Chart.js, react-chartjs-2, axios, lucide-react |
 | AI | Google Gemini 2.5 Flash |
 | Font | DM Sans + DM Mono (Google Fonts) |
