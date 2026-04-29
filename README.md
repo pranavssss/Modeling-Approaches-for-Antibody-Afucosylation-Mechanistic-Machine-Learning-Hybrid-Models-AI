@@ -21,13 +21,13 @@ bms-pipeline/
 ├── backend/
 │   ├── main.py              ← FastAPI backend — all logic lives here
 │   ├── requirements.txt     ← Python dependencies
-│   └── .env                 ← Your Gemini API key (never commit this)
+│   └── .env                 ← Your Gemini API key 
 │
 ├── frontend/
 │   ├── package.json         ← Node dependencies
 │   ├── public/
 │   │   ├── index.html       ← HTML entry point
-│   │   └── bms-logo.png     ← BMS logo (add this yourself)
+│   │   └── bms-logo.png     ← BMS logo 
 │   └── src/
 │       ├── App.jsx          ← Entire frontend — all pages and components
 │       ├── index.js         ← React entry point
