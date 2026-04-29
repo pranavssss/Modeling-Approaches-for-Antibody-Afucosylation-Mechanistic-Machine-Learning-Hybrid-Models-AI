@@ -1,0 +1,23 @@
+{
+  "name": "bms-pipeline-dashboard",
+  "version": "3.0.0",
+  "private": true,
+  "dependencies": {
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "react-scripts": "5.0.1",
+    "chart.js": "^4.4.4",
+    "react-chartjs-2": "^5.2.0",
+    "axios": "^1.7.7",
+    "lucide-react": "^0.447.0"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build"
+  },
+  "browserslist": {
+    "production": [">0.2%","not dead"],
+    "development": ["last 1 chrome version"]
+  },
+  "proxy": "http://localhost:8000"
+}
