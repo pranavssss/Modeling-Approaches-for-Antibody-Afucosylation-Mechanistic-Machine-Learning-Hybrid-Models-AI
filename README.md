@@ -34,6 +34,10 @@ bms-pipeline/
 │       └── index.css
 │
 └── README.md
+└── BMS Midterm Presentation.pdf      ← BMS Midterm Presentation Slides - midterm progress check
+└── Results and comparison (BMS1 VS BMS2).docx     ← Results document comparing 2 datsets: BMS 1 (N=500) and BMS 2 (N=10,000) 
+
+
 ```
 
 
