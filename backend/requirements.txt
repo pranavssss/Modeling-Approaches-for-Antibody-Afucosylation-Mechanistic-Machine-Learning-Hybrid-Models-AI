@@ -1,0 +1,16 @@
+fastapi==0.115.0
+uvicorn[standard]==0.30.6
+httpx==0.27.2
+pydantic==2.8.2
+python-multipart==0.0.9
+python-dotenv==1.0.1
+pandas>=2.0
+numpy>=1.24
+scipy>=1.11
+scikit-learn>=1.3
+xgboost>=2.0
+shap>=0.44
+authlib==1.3.1
+itsdangerous==2.2.0
+aiosmtplib==3.0.1
+email-validator==2.1.1
