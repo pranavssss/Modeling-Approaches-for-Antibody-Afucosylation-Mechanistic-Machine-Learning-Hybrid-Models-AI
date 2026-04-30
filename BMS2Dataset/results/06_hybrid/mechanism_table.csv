@@ -1,0 +1,6 @@
+Feature,Full_Name,Components,Mechanism,Reference,Expected_Effect
+FPI,Fucosylation Potential Index,"GDP-Fucose, Mn²⁺",FUT8 substrate × cofactor activation (Michaelis-Menten),Raju et al. 2000; Sha et al. 2016,Strong positive — directly governs fucose transfer rate
+Energy_Charge,Cellular Energy Proxy,"DO, Lactate, pCO₂",Oxidative phosphorylation vs glycolytic stress balance,Jedrzejewski et al. 2014; Hossler et al. 2009,Positive — Golgi function requires ATP/GTP
+Golgi_Proxy,Golgi Processing Capacity,"Uridine, pH, Temperature",Nucleotide sugar supply × pH/temp optima for Golgi enzymes,Sha et al. 2016; Von Stosch et al. 2014,Positive — optimal Golgi conditions enhance glycosylation
+Stress_Index,Metabolic Stress Index,"Osmolality, Lactate, pCO₂",Synergistic cellular stress disrupting ER/Golgi homeostasis,Hossler et al. 2009,Negative — stress compromises glycosylation fidelity
+Enzyme_Activity,Glycosyltransferase Activity Factor,"Mn²⁺, pH, Temperature",Pseudo-Arrhenius × pH-bell-curve for FUT8 activity,Raju et al. 2000,Positive — higher enzyme activity → more fucosylation
