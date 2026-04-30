@@ -1,7 +1,0 @@
-Model,Accuracy,Interpretability,Regulatory,Uncertainty,Data_Efficiency,Robustness,Total
-Ridge,1.0,5.0,4.0,2.0,1.0,4.25,17.25
-PLSR,1.0,5.0,5.0,2.0,1.0,4.24,18.24
-Random Forest,4.5,3.0,3.0,3.0,4.3,5.0,22.8
-XGBoost,5.0,4.0,4.0,2.0,4.92,4.17,24.09
-GPR,4.63,3.0,5.0,5.0,5.0,1.0,23.63
-ANN,4.83,2.0,2.0,1.0,3.89,2.16,15.88
