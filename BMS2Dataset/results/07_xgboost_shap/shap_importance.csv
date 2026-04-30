@@ -1,0 +1,11 @@
+Feature,Mean_Abs_SHAP
+Temperature_C,2.2805233
+GDP_Fucose_uM,2.2600458
+pH,1.9710742
+Mn_uM,1.4058402
+pCO2_mmHg,0.9568096
+DO_pct,0.7392353
+Lactate_g_per_L,0.73404723
+Osmolality_mOsm,0.5321704
+Uridine_mM,0.44903922
+VCD_1e6_per_mL,0.36147553
