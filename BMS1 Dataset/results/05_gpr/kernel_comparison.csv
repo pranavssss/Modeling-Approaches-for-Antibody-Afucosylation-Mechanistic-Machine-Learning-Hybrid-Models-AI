@@ -1,0 +1,5 @@
+Kernel,R²,RMSE,mean_std,coverage_95,fit_time,optimized_kernel
+RBF (Squared Exponential),0.7486309122510669,2.468771018016262,2.3389292169686247,95.0,1.429539680480957,45.5**2 * RBF(length_scale=9.98) + WhiteKernel(noise_level=4.04)
+Matérn 5/2,0.7361980818744811,2.5290874724938366,2.3972373770850095,95.0,1.2321982383728027,"47.6**2 * Matern(length_scale=15.8, nu=2.5) + WhiteKernel(noise_level=3.71)"
+Matérn 3/2,0.7185594556387083,2.612270866304199,2.494120924086553,94.0,1.1588828563690186,"49**2 * Matern(length_scale=25.4, nu=1.5) + WhiteKernel(noise_level=2.98)"
+Rational Quadratic,0.7486306647518464,2.4687722333979103,2.338926144719891,95.0,1.6352314949035645,"45.5**2 * RationalQuadratic(alpha=3.21e+04, length_scale=9.98) + WhiteKernel(noise_level=4.04)"

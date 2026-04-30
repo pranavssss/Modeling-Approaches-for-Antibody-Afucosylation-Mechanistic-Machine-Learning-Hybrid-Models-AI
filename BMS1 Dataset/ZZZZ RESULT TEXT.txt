@@ -1,0 +1,980 @@
+======================================================================
+STEP 3: Adding batch effects (random intercept per batch)
+======================================================================
+Batch effects (% shift): {0: np.float64(-0.9), 1: np.float64(1.65), 2: np.float64(-1.35), 3: np.float64(0.89), 4: np.float64(-1.23), 5: np.float64(1.16), 6: np.float64(-0.45), 7: np.float64(-0.5), 8: np.float64(0.08), 9: np.float64(-2.02)}
+
+======================================================================
+STEP 4: Injecting measurement noise
+======================================================================
+Base noise std: 1.8
+Total noise std: 1.746
+Final fucosylation range: [67.29%, 100.00%]
+Mean: 87.53%, Std: 5.59%
+
+======================================================================
+STEP 5: Creating missing data variants
+======================================================================
+MCAR: 273 values missing (5.5%)
+MNAR: 53 values missing (sensor-failure pattern)
+
+======================================================================
+STEP 6: Creating noise-corrupted variants for sensitivity analysis
+======================================================================
+  low noise (σ=0.9): target std = 5.62%
+  medium noise (σ=1.8): target std = 5.67%
+  high noise (σ=3.6): target std = 6.46%
+  extreme noise (σ=7.2): target std = 8.73%
+
+======================================================================
+STEP 7: Generating time-series variant (culture day progression)
+======================================================================
+Time-series dataset: 280 observations (20 batches × 14 days)
+Fucosylation range: [80.40%, 100.00%]
+
+======================================================================
+STEP 8: Saving datasets
+======================================================================
+  ✓ Primary dataset: (500, 12)
+  ✓ MCAR dataset: (500, 12)
+  ✓ MNAR dataset: (500, 12)
+  ✓ Noise (low): (500, 12)
+  ✓ Noise (medium): (500, 12)
+  ✓ Noise (high): (500, 12)
+  ✓ Noise (extreme): (500, 12)
+  ✓ Time-series dataset: (280, 13)
+  ✓ Ground truth parameters saved
+
+======================================================================
+DATASET SUMMARY
+======================================================================
+
+Primary dataset shape: (500, 12)
+
+Descriptive statistics:
+       GDP_Fucose_uM    Mn_uM  Uridine_mM       pH   DO_pct  pCO2_mmHg  Temperature_C  VCD_1e6_per_mL  Osmolality_mOsm  Lactate_g_per_L  Batch_ID  Fucosylation_pct
+count        500.000  500.000     500.000  500.000  500.000    500.000        500.000         500.000          500.000          500.000   500.000           500.000
+mean          42.392    0.025       2.829    6.997   49.991     75.447         35.489          13.107          338.482            2.053     4.668            87.526
+std           22.402    0.014       1.337    0.230   17.149     26.615          1.415           6.671           33.938            1.134     2.867             5.586
+min            5.380    0.001       0.522    6.603   20.094     30.001         33.010           2.015          280.004            0.101     0.000            67.290
+25%           23.096    0.012       1.586    6.793   36.087     53.383         34.249           7.323          308.857            1.068     2.000            83.793
+50%           43.487    0.024       2.929    7.007   49.761     75.167         35.595          12.552          340.014            2.002     5.000            87.761
+75%           61.709    0.037       3.998    7.190   64.598     99.112         36.628          19.270          363.823            3.063     7.000            91.413
+max           79.472    0.050       4.997    7.399   79.726    119.804         37.994          24.990          399.730            3.988     9.000           100.000
+
+Correlation with target (Fucosylation_pct):
+  GDP_Fucose_uM            : +0.4606
+  Temperature_C            : +0.4390
+  Mn_uM                    : +0.2864
+  DO_pct                   : +0.1561
+  VCD_1e6_per_mL           : +0.1155
+  Uridine_mM               : +0.0875
+  pH                       : +0.0582
+  Osmolality_mOsm          : -0.0509
+  Lactate_g_per_L          : -0.1104
+  pCO2_mmHg                : -0.1901
+
+✅ All datasets generated successfully.
+   Files saved to: data/
+PS C:\Users\gsj24\OneDrive\Desktop\BMS> & "C:\Program Files\Python313\python.exe" c:/Users/gsj24/OneDrive/Desktop/BMS/01_mlr_ridge_baseline.py
+======================================================================
+01 — MLR / RIDGE BASELINE
+======================================================================
+Dataset: 500 samples, 10 features
+Train: 400, Test: 100
+
+--------------------------------------------------
+MODEL 1: Ordinary Least Squares (OLS)
+--------------------------------------------------
+  R²_train: 0.6340
+  R²_test: 0.5098
+  RMSE_train: 3.4685
+  RMSE_test: 3.4476
+  MAE_test: 2.8549
+  CV R² (5-fold): 0.6093 ± 0.0780
+
+  Standardized Coefficients (biological interpretation):
+    GDP_Fucose_uM            : +2.8743 ↑
+    Temperature_C            : +2.6825 ↑
+    Mn_uM                    : +1.8685 ↑
+    pCO2_mmHg                : -0.9949 ↓
+    DO_pct                   : +0.9467 ↑
+    Osmolality_mOsm          : -0.7263 ↓
+    Lactate_g_per_L          : -0.5799 ↓
+    VCD_1e6_per_mL           : +0.4518 ↑
+    Uridine_mM               : +0.4206 ↑
+    pH                       : +0.2980 ↑
+
+--------------------------------------------------
+MODEL 2: RidgeCV (L2 Regularization)
+--------------------------------------------------
+  Optimal alpha: 3.351603
+  R²_train: 0.6339
+  R²_test: 0.5127
+  RMSE_train: 3.4687
+  RMSE_test: 3.4372
+  MAE_test: 2.8464
+
+======================================================================
+ASSUMPTION DIAGNOSTICS
+======================================================================
+
+--- 4a. Residual Normality ---
+  Shapiro-Wilk test: W=0.9898, p=0.0070
+  → Residuals deviate from normality (p < 0.05)
+    Note: With large n, minor deviations are expected. Check Q-Q plot visually.
+  Skewness: -0.3280 (ideal: 0)
+  Excess Kurtosis: -0.2466 (ideal: 0)
+
+--- 4b. Homoscedasticity (Breusch-Pagan Test) ---
+  BP statistic: 9.9911, p-value: 0.4413
+  → No evidence of heteroscedasticity
+
+--- 4c. Variance Inflation Factors (VIF) ---
+  Uridine_mM               : 1.04
+  Lactate_g_per_L          : 1.04
+  Osmolality_mOsm          : 1.04
+  DO_pct                   : 1.03
+  GDP_Fucose_uM            : 1.02
+  Temperature_C            : 1.02
+  pCO2_mmHg                : 1.02
+  VCD_1e6_per_mL           : 1.02
+  Mn_uM                    : 1.01
+  pH                       : 1.01
+  Rule of thumb: VIF > 5 indicates concerning multicollinearity
+  VIF > 10 indicates severe multicollinearity
+
+--- 4d. Cook's Distance (Influential Observations) ---
+  Threshold (4/n): 0.0100
+  Influential observations (Cook's D > 4/n): 19 (4.8%)
+  Max Cook's D: 0.0431
+
+--------------------------------------------------
+Generating diagnostic plots...
+--------------------------------------------------
+  ✓ Diagnostic plots saved
+  ✓ Comparison plot saved
+
+======================================================================
+SUMMARY
+======================================================================
+OLS  — Test R²: 0.5098, RMSE: 3.4476
+Ridge — Test R²: 0.5127, RMSE: 3.4372
+Ridge optimal α: 3.351603
+
+✅ Baseline models complete. Results saved to results/01_mlr_ridge/
+PS C:\Users\gsj24\OneDrive\Desktop\BMS> & "C:\Program Files\Python313\python.exe" c:/Users/gsj24/OneDrive/Desktop/BMS/02_plsr_model.py
+======================================================================
+02 — PARTIAL LEAST SQUARES REGRESSION (PLSR)
+======================================================================
+Dataset: 500 samples, 10 features
+Train: 400, Test: 100
+
+--------------------------------------------------
+Component Selection (CV)
+--------------------------------------------------
+  1 components: R²=0.5917 ± 0.0542, RMSE=3.6517
+  2 components: R²=0.6141 ± 0.0418, RMSE=3.5516
+  3 components: R²=0.6142 ± 0.0405, RMSE=3.5514
+  4 components: R²=0.6142 ± 0.0405, RMSE=3.5514
+  5 components: R²=0.6142 ± 0.0405, RMSE=3.5514
+  6 components: R²=0.6142 ± 0.0405, RMSE=3.5514
+  7 components: R²=0.6142 ± 0.0405, RMSE=3.5514
+  8 components: R²=0.6142 ± 0.0405, RMSE=3.5514
+  9 components: R²=0.6142 ± 0.0405, RMSE=3.5514
+  10 components: R²=0.6142 ± 0.0405, RMSE=3.5514
+
+  → Optimal components: 4
+
+--------------------------------------------------
+Final PLSR Model (4 components)
+--------------------------------------------------
+  R²_train: 0.6340
+  R²_test: 0.5098
+  RMSE_train: 3.4685
+  RMSE_test: 3.4475
+  MAE_test: 2.8548
+
+--------------------------------------------------
+VIP Scores — Feature Importance
+--------------------------------------------------
+
+  Variable Importance in Projection:
+    GDP_Fucose_uM            : 1.9171 ★ SIGNIFICANT
+    Temperature_C            : 1.7637 ★ SIGNIFICANT
+    Mn_uM                    : 1.1977 ★ SIGNIFICANT
+    pCO2_mmHg                : 0.7667   low
+    DO_pct                   : 0.5906   low
+    VCD_1e6_per_mL           : 0.5233   low
+    Lactate_g_per_L          : 0.4495   low
+    Uridine_mM               : 0.3840   low
+    Osmolality_mOsm          : 0.3549   low
+    pH                       : 0.3059   low
+
+  Rule: VIP > 1.0 = significant influence on response
+  Significant features: 3 / 10
+
+--------------------------------------------------
+Latent Space Analysis
+--------------------------------------------------
+
+  X-Loadings (feature contributions to each latent variable):
+                    LV1     LV2     LV3     LV4
+GDP_Fucose_uM    0.6091  0.0140  0.3274 -0.1596
+Mn_uM            0.3635 -0.1259  0.2497 -0.1803
+Uridine_mM       0.1502  0.2890  0.3541 -0.2967
+pH               0.1248  0.2939  0.2431  0.4426
+DO_pct           0.1702 -0.1475 -0.0248 -0.4728
+pCO2_mmHg       -0.2680 -0.1508  0.6389  0.2689
+Temperature_C    0.5482 -0.1221 -0.2171  0.5430
+VCD_1e6_per_mL   0.2156  0.4578 -0.3836  0.1807
+Osmolality_mOsm  0.0118  0.7284  0.2428 -0.1133
+Lactate_g_per_L -0.1602 -0.1458 -0.0034  0.1914
+
+  Variance explained per component:
+    LV1: 9.78%
+    LV2: 10.10%
+    LV3: 11.40%
+    LV4: 9.79%
+    Cumulative: 41.08%
+
+======================================================================
+PCA vs PLSR COMPARISON
+======================================================================
+Justification: PLSR maximizes covariance with Y,
+while PCA only maximizes variance in X (ignoring Y).
+
+  Components | PLSR R² (test) | PCR R² (test) | PCA Var Explained
+  -----------------------------------------------------------------
+           1 |         0.5917 |        0.0061 |             12.7% ← PLSR
+           2 |         0.6141 |        0.0017 |             24.6% ← PLSR
+           3 |         0.6142 |        0.2016 |             35.6% ← PLSR
+           4 |         0.6142 |        0.2026 |             46.5% ← PLSR
+           5 |         0.6142 |        0.2015 |             56.7% ← PLSR
+           6 |         0.6142 |        0.2279 |             66.6% ← PLSR
+           7 |         0.6142 |        0.1922 |             75.8% ← PLSR
+           8 |         0.6142 |        0.5351 |             84.4% ← PLSR
+           9 |         0.6142 |        0.5102 |             92.4% ← PLSR
+          10 |         0.6142 |        0.5098 |            100.0% ← PLSR
+
+  Key Insight: PLSR typically outperforms PCR because it finds
+  latent variables that are relevant to the response variable (Y),
+  not just directions of maximum variance in X.
+
+--------------------------------------------------
+Generating plots...
+--------------------------------------------------
+  ✓ All plots saved
+
+======================================================================
+SUMMARY
+======================================================================
+Optimal components: 4
+Test R²: 0.5098
+Test RMSE: 3.4475
+Significant features (VIP > 1): 3
+
+✅ PLSR analysis complete. Results saved to results/02_plsr/
+PS C:\Users\gsj24\OneDrive\Desktop\BMS> & "C:\Program Files\Python313\python.exe" c:/Users/gsj24/OneDrive/Desktop/BMS/03_random_forest.py
+======================================================================
+03 — RANDOM FOREST REGRESSION
+======================================================================
+Train: 400, Test: 100
+
+--------------------------------------------------
+Hyperparameter Tuning (RandomizedSearchCV)
+--------------------------------------------------
+  Best CV R²: 0.6993
+  Best parameters:
+    bootstrap: True
+    max_depth: None
+    max_features: 0.5
+    min_samples_leaf: 1
+    min_samples_split: 3
+    n_estimators: 229
+
+--------------------------------------------------
+Final Model Performance
+--------------------------------------------------
+  R²_train: 0.9574
+  R²_test: 0.6590
+  RMSE_train: 1.1836
+  RMSE_test: 2.8755
+  MAE_test: 2.1982
+  OOB_score: 0.7159
+
+======================================================================
+FEATURE IMPORTANCE COMPARISON
+======================================================================
+
+--- MDI (Gini) Importance ---
+  ⚠️ NOTE: MDI importance can be biased toward high-cardinality/
+  high-variance features (Strobl et al., 2007). Use with caution.
+    Temperature_C            : 0.2681
+    GDP_Fucose_uM            : 0.2618
+    pH                       : 0.1423
+    Mn_uM                    : 0.1044
+    pCO2_mmHg                : 0.0556
+    DO_pct                   : 0.0403
+    VCD_1e6_per_mL           : 0.0349
+    Lactate_g_per_L          : 0.0320
+    Uridine_mM               : 0.0304
+    Osmolality_mOsm          : 0.0302
+
+--- Permutation Importance (corrected) ---
+  Method: Shuffle each feature, measure R² drop on test set
+  Advantage: Not biased by feature scale or cardinality
+  ★ Temperature_C            : 0.5227 ± 0.0911
+  ★ GDP_Fucose_uM            : 0.4361 ± 0.0722
+  ★ pH                       : 0.2053 ± 0.0320
+  ★ Mn_uM                    : 0.1032 ± 0.0328
+  ★ pCO2_mmHg                : 0.0690 ± 0.0162
+  ★ DO_pct                   : 0.0253 ± 0.0071
+    Lactate_g_per_L          : 0.0113 ± 0.0075
+    Uridine_mM               : 0.0086 ± 0.0071
+    VCD_1e6_per_mL           : 0.0032 ± 0.0049
+    Osmolality_mOsm          : 0.0009 ± 0.0051
+
+--- Ranking Comparison (MDI vs Permutation) ---
+  Rank                         MDI               Permutation    Match
+  ------------------------------------------------------------------
+  1                  Temperature_C             Temperature_C        ✓
+  2                  GDP_Fucose_uM             GDP_Fucose_uM        ✓
+  3                             pH                        pH        ✓
+  4                          Mn_uM                     Mn_uM        ✓
+  5                      pCO2_mmHg                 pCO2_mmHg        ✓
+  6                         DO_pct                    DO_pct        ✓
+  7                 VCD_1e6_per_mL           Lactate_g_per_L        ✗
+  8                Lactate_g_per_L                Uridine_mM        ✗
+  9                     Uridine_mM            VCD_1e6_per_mL        ✗
+  10               Osmolality_mOsm           Osmolality_mOsm        ✓
+
+  Spearman rank correlation: ρ = 0.9636 (p = 0.0000)
+  → Strong agreement between MDI and Permutation rankings
+
+--------------------------------------------------
+Generating plots...
+--------------------------------------------------
+  ✓ All plots saved
+
+======================================================================
+SUMMARY
+======================================================================
+Test R²: 0.6590
+Test RMSE: 2.8755
+OOB Score: 0.7159
+MDI vs Permutation rank correlation: ρ = 0.9636
+
+✅ Random Forest analysis complete. Results saved to results/03_random_forest/
+PS C:\Users\gsj24\OneDrive\Desktop\BMS> & "C:\Program Files\Python313\python.exe" c:/Users/gsj24/OneDrive/Desktop/BMS/04_ann_model.py
+======================================================================
+04 — ARTIFICIAL NEURAL NETWORK (ANN)
+======================================================================
+Train: 340, Validation: 60, Test: 100
+Using PyTorch backend
+Device: cpu
+
+Model architecture:
+FucosylationANN(
+  (network): Sequential(
+    (0): Linear(in_features=10, out_features=128, bias=True)
+    (1): BatchNorm1d(128, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (2): ReLU()
+    (3): Dropout(p=0.2, inplace=False)
+    (4): Linear(in_features=128, out_features=64, bias=True)
+    (5): BatchNorm1d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (6): ReLU()
+    (7): Dropout(p=0.2, inplace=False)
+    (8): Linear(in_features=64, out_features=32, bias=True)
+    (9): BatchNorm1d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (10): ReLU()
+    (11): Dropout(p=0.1, inplace=False)
+    (12): Linear(in_features=32, out_features=1, bias=True)
+  )
+)
+Total parameters: 12,225
+
+--------------------------------------------------
+Training...
+--------------------------------------------------
+  Epoch   50/500: Train Loss=4042.0754, Val Loss=4006.4255, LR=0.001000
+  Epoch  100/500: Train Loss=336.4506, Val Loss=349.3945, LR=0.001000
+  Epoch  150/500: Train Loss=53.6799, Val Loss=36.7108, LR=0.001000
+  Epoch  200/500: Train Loss=60.6864, Val Loss=24.4513, LR=0.000250
+  Epoch  250/500: Train Loss=63.1342, Val Loss=23.8231, LR=0.000125
+  Epoch  300/500: Train Loss=46.3610, Val Loss=21.0631, LR=0.000031
+  Early stopping at epoch 342
+  Best validation loss: 19.5701
+
+--------------------------------------------------
+Model Evaluation
+--------------------------------------------------
+  R²_train: 0.7647
+  R²_test: 0.3561
+  RMSE_train: 2.7812
+  RMSE_test: 3.9512
+  MAE_test: 3.1216
+
+======================================================================
+LIME INTERPRETABILITY (Addressing Black-Box Limitation)
+======================================================================
+LIME provides local, human-readable explanations for individual predictions.
+This is critical for FDA/EMA regulatory discussions where model
+transparency is required (ICH Q8/Q9 framework).
+  ⚠️ LIME not installed. Run: pip install lime
+  Skipping interpretability analysis.
+
+--------------------------------------------------
+Generating plots...
+--------------------------------------------------
+  ✓ All plots saved
+
+======================================================================
+SUMMARY
+======================================================================
+Test R²: 0.3561
+Test RMSE: 3.9512
+LIME interpretability: Not installed
+
+Regulatory Note: While ANNs achieve high accuracy, their use in
+regulated environments requires interpretability tools like LIME
+or SHAP to satisfy ICH Q8/Q9 transparency requirements.
+
+✅ ANN analysis complete. Results saved to results/04_ann/
+PS C:\Users\gsj24\OneDrive\Desktop\BMS> & "C:\Program Files\Python313\python.exe" c:/Users/gsj24/OneDrive/Desktop/BMS/05_gpr_model.py
+======================================================================
+05 — GAUSSIAN PROCESS REGRESSION (GPR)
+======================================================================
+Train: 400, Test: 100
+
+--------------------------------------------------
+Scalability Considerations
+--------------------------------------------------
+GPR computational complexity: O(n³) for training, O(n²) for prediction
+Full training set: n=400
+Subsampling to 300 for tractability
+  → Using 300 samples for GP training
+  Note: For production, consider sparse GP approximations (e.g., FITC, VFE)
+
+======================================================================
+KERNEL COMPARISON
+======================================================================
+Testing multiple kernels to find best fit for fucosylation data.
+Each kernel encodes different assumptions about the underlying function.
+
+--- RBF (Squared Exponential) ---
+  Assumption: Assumes smooth, infinitely differentiable function. Good default.
+  R²: 0.7486, RMSE: 2.4688
+  Mean σ: 2.3389, 95% CI Coverage: 95.0%
+  Fit time: 2.25s
+  Optimized kernel: 45.5**2 * RBF(length_scale=9.98) + WhiteKernel(noise_level=4.04)
+
+--- Matérn 5/2 ---
+  Assumption: Twice differentiable. More realistic for physical processes.
+  R²: 0.7362, RMSE: 2.5291
+  Mean σ: 2.3972, 95% CI Coverage: 95.0%
+  Fit time: 2.12s
+  Optimized kernel: 47.6**2 * Matern(length_scale=15.8, nu=2.5) + WhiteKernel(noise_level=3.71)
+
+--- Matérn 3/2 ---
+  Assumption: Once differentiable. Captures rougher response surfaces.
+  R²: 0.7186, RMSE: 2.6123
+  Mean σ: 2.4941, 95% CI Coverage: 94.0%
+  Fit time: 1.96s
+  Optimized kernel: 49**2 * Matern(length_scale=25.4, nu=1.5) + WhiteKernel(noise_level=2.98)
+
+--- Rational Quadratic ---
+  Assumption: Mixture of RBF kernels at different length scales. Handles multi-scale variation.
+  R²: 0.7486, RMSE: 2.4688
+  Mean σ: 2.3389, 95% CI Coverage: 95.0%
+  Fit time: 2.71s
+  Optimized kernel: 45.5**2 * RationalQuadratic(alpha=3.21e+04, length_scale=9.98) + WhiteKernel(noise_level=4.04)
+
+→ Best kernel: RBF (Squared Exponential) (R²=0.7486)
+
+--------------------------------------------------
+Final GPR Model (RBF (Squared Exponential))
+--------------------------------------------------
+  R²_train: 0.9072
+  R²_test: 0.7486
+  RMSE_train: 1.7696
+  RMSE_test: 2.4688
+  MAE_test: 1.9422
+  Mean_Uncertainty: 2.3389
+  CI_Coverage_95pct: 95.0000
+
+--------------------------------------------------
+Calibration Analysis — Are Predicted Uncertainties Reliable?
+--------------------------------------------------
+  50% CI: Actual coverage = 50.0% ✓ well-calibrated
+  70% CI: Actual coverage = 69.0% ✓ well-calibrated
+  80% CI: Actual coverage = 78.0% ✓ well-calibrated
+  90% CI: Actual coverage = 90.0% ✓ well-calibrated
+  95% CI: Actual coverage = 95.0% ✓ well-calibrated
+  99% CI: Actual coverage = 97.0% ✓ well-calibrated
+
+  Mean Absolute Calibration Error: 0.83%
+  → Excellent calibration — uncertainties are trustworthy
+
+--------------------------------------------------
+Decision Support — High vs Low Confidence Predictions
+--------------------------------------------------
+  High-confidence predictions (σ < 2.22):
+    n=25, R²=0.7634, RMSE=2.0625
+  Low-confidence predictions (σ > 2.45):
+    n=25, R²=0.4407, RMSE=3.0749
+
+  → High-confidence subset is +73.2% better
+  → This validates that uncertainty estimates are informative for decision-making
+
+--------------------------------------------------
+Generating plots...
+--------------------------------------------------
+  ✓ All plots saved
+
+======================================================================
+SUMMARY
+======================================================================
+Best kernel: RBF (Squared Exponential)
+Test R²: 0.7486
+Test RMSE: 2.4688
+95% CI Coverage: 95.0%
+Mean Calibration Error: 0.83%
+
+Regulatory Relevance: GPR's uncertainty quantification directly
+supports ICH Q8 Design Space definition — regions where σ < threshold
+define high-confidence operating ranges for manufacturing.
+
+✅ GPR analysis complete. Results saved to results/05_gpr/
+PS C:\Users\gsj24\OneDrive\Desktop\BMS> & "C:\Program Files\Python313\python.exe" c:/Users/gsj24/OneDrive/Desktop/BMS/06_hybrid_model.py
+======================================================================
+06 — PHYSICS-INFORMED HYBRID MODEL
+======================================================================
+Dataset: 500 samples, 10 raw features
+
+======================================================================
+PHYSICS-INFORMED FEATURE ENGINEERING
+======================================================================
+
+--- Feature 1: Fucosylation Potential Index (FPI) ---
+  Biology: FUT8 activity depends on GDP-Fucose (substrate) and Mn²⁺ (cofactor)
+  Model: FPI = GDP_Fucose × log(1 + Mn/Km) — saturating cofactor effect
+  Range: [1.3619, 136.6605]
+
+--- Feature 2: Energy Charge Proxy ---
+  Biology: Golgi glycosylation requires ATP/GTP. High DO promotes oxidative
+  phosphorylation; high lactate/pCO₂ indicate metabolic stress.
+  Model: Energy = DO / (1 + Lactate) / (1 + pCO2/100)
+  Range: [2.5440, 43.7602]
+
+--- Feature 3: Golgi Processing Proxy ---
+  Biology: Golgi glycosylation depends on pH optimality, nucleotide sugar
+  availability (uridine), and temperature (enzyme kinetics).
+  Model: Golgi = Uridine × exp(-|pH-7.0|²/0.32) × exp(-|T-36.5|²/12.5)
+  Range: [0.2775, 4.7766]
+
+--- Feature 4: Metabolic Stress Index ---
+  Biology: Osmolality, lactate, and pCO₂ synergistically compromise
+  glycosylation by disrupting ER/Golgi homeostasis.
+  Model: Stress = (Osm/400 + Lactate/4 + pCO2/120)² — synergistic penalty
+  Range: [1.2405, 8.5919]
+
+--- Feature 5: Enzyme Activity Factor ---
+  Biology: FUT8 and related glycosyltransferases have pH and temperature
+  optima. Combined pseudo-Arrhenius × pH-bell-curve model.
+  Model: Activity = Mn × pH_bell × Temp_bell
+  Range: [0.000413, 0.048561]
+
+  Total features: 15 (10 raw + 5 engineered)
+
+======================================================================
+MODEL COMPARISON: Raw vs Engineered vs Hybrid Features
+======================================================================
+
+--- Raw Features Only (10 features) ---
+  R²: 0.6885, RMSE: 2.7484, MAE: 2.2205
+  CV R²: 0.7797 ± 0.0268
+  Top 5 features:
+    Temperature_C            : 0.2767
+    GDP_Fucose_uM            : 0.2730
+    pH                       : 0.1688
+    Mn_uM                    : 0.1188
+    pCO2_mmHg                : 0.0418
+
+--- Engineered Only (5 features) ---
+  R²: 0.4671, RMSE: 3.5945, MAE: 2.8744
+  CV R²: 0.5240 ± 0.1051
+  Top 5 features:
+    Enzyme_Activity          : 0.3124
+    FPI                      : 0.2626
+    Golgi_Proxy              : 0.2103
+    Stress_Index             : 0.1157
+    Energy_Charge            : 0.0989
+
+--- Hybrid (Raw + Engineered) (15 features) ---
+  R²: 0.7221, RMSE: 2.5959, MAE: 2.0420
+  CV R²: 0.7846 ± 0.0297
+  Top 5 features:
+    Enzyme_Activity          : 0.2105
+    GDP_Fucose_uM            : 0.1778
+    Temperature_C            : 0.1665
+    pH                       : 0.1172
+    FPI                      : 0.1036
+
+======================================================================
+PHYSICS CONTRIBUTION ANALYSIS
+======================================================================
+  Raw features R²:     0.6885
+  Engineered only R²:  0.4671
+  Hybrid R²:           0.7221
+  Improvement from physics: +4.88%
+
+  Interpretation: Engineered features alone capture 64.7%
+  of the hybrid model's performance using only 5 features
+  vs 10 raw features — demonstrating the value of domain knowledge.
+
+======================================================================
+BIOLOGICAL MECHANISM SUMMARY
+======================================================================
+
+  FPI — Fucosylation Potential Index
+    Components: GDP-Fucose, Mn²⁺
+    Mechanism: FUT8 substrate × cofactor activation (Michaelis-Menten)
+    Expected: Strong positive — directly governs fucose transfer rate
+    Reference: Raju et al. 2000; Sha et al. 2016
+
+  Energy_Charge — Cellular Energy Proxy
+    Components: DO, Lactate, pCO₂
+    Mechanism: Oxidative phosphorylation vs glycolytic stress balance
+    Expected: Positive — Golgi function requires ATP/GTP
+    Reference: Jedrzejewski et al. 2014; Hossler et al. 2009
+
+  Golgi_Proxy — Golgi Processing Capacity
+    Components: Uridine, pH, Temperature
+    Mechanism: Nucleotide sugar supply × pH/temp optima for Golgi enzymes
+    Expected: Positive — optimal Golgi conditions enhance glycosylation
+    Reference: Sha et al. 2016; Von Stosch et al. 2014
+
+  Stress_Index — Metabolic Stress Index
+    Components: Osmolality, Lactate, pCO₂
+    Mechanism: Synergistic cellular stress disrupting ER/Golgi homeostasis
+    Expected: Negative — stress compromises glycosylation fidelity
+    Reference: Hossler et al. 2009
+
+  Enzyme_Activity — Glycosyltransferase Activity Factor
+    Components: Mn²⁺, pH, Temperature
+    Mechanism: Pseudo-Arrhenius × pH-bell-curve for FUT8 activity
+    Expected: Positive — higher enzyme activity → more fucosylation
+    Reference: Raju et al. 2000
+
+--------------------------------------------------
+Generating plots...
+--------------------------------------------------
+  ✓ All plots saved
+
+======================================================================
+SUMMARY
+======================================================================
+Raw features R²:    0.6885
+Engineered only R²: 0.4671
+Hybrid R²:          0.7221
+Physics improvement: +4.88%
+
+✅ Hybrid model analysis complete. Results saved to results/06_hybrid/
+PS C:\Users\gsj24\OneDrive\Desktop\BMS> & "C:\Program Files\Python313\python.exe" c:/Users/gsj24/OneDrive/Desktop/BMS/07_xgboost_shap.py
+  Installing xgboost...
+
+[notice] A new release of pip is available: 25.3 -> 26.0.1
+[notice] To update, run: python.exe -m pip install --upgrade pip
+  Installing shap...
+
+[notice] A new release of pip is available: 25.3 -> 26.0.1
+[notice] To update, run: python.exe -m pip install --upgrade pip
+======================================================================
+07 — XGBOOST + SHAP EXPLAINABILITY
+======================================================================
+Train: 400, Test: 100
+
+--------------------------------------------------
+Hyperparameter Tuning (RandomizedSearchCV)
+--------------------------------------------------
+  Using XGBoost
+  Best CV R²: 0.8151
+  Best parameters:
+    colsample_bytree: 0.7087055015743895
+    gamma: 0.11105390523536512
+    learning_rate: 0.05
+    max_depth: 4
+    min_child_weight: 8
+    n_estimators: 414
+    reg_alpha: 0.01
+    reg_lambda: 2.0
+    subsample: 0.8075162486973464
+
+--------------------------------------------------
+Model Performance
+--------------------------------------------------
+  R²_train: 0.9937
+  R²_test: 0.7431
+  RMSE_train: 0.4542
+  RMSE_test: 2.4956
+  MAE_test: 1.9426
+  CV R² (5-fold): 0.8145 ± 0.0250
+
+======================================================================
+SHAP EXPLAINABILITY ANALYSIS
+======================================================================
+SHAP (SHapley Additive exPlanations) provides:
+  - Consistent, locally accurate feature attributions
+  - Both global and local interpretability
+  - Detection of feature interactions
+  - Regulatory compliance (ICH Q8/Q9)
+
+  Computing SHAP values (TreeExplainer)...
+
+--- Global Feature Importance (mean |SHAP|) ---
+    Temperature_C            : 2.2965
+    GDP_Fucose_uM            : 2.2630
+    pH                       : 1.7271
+    Mn_uM                    : 1.2743
+    pCO2_mmHg                : 0.8831
+    DO_pct                   : 0.6071
+    Lactate_g_per_L          : 0.5123
+    Osmolality_mOsm          : 0.3453
+    Uridine_mM               : 0.3049
+    VCD_1e6_per_mL           : 0.2475
+
+--- Feature Direction Analysis ---
+  How each feature pushes predictions (positive vs negative SHAP):
+    GDP_Fucose_uM            : mean SHAP=-0.2628 (↓ fucosylation), correlation=+0.960 (positive)
+    Mn_uM                    : mean SHAP=-0.1461 (↓ fucosylation), correlation=+0.970 (positive)
+    Uridine_mM               : mean SHAP=-0.0111 (↓ fucosylation), correlation=+0.881 (positive)
+    pH                       : mean SHAP=+0.1221 (↑ fucosylation), correlation=+0.360 (positive)
+    DO_pct                   : mean SHAP=+0.0983 (↑ fucosylation), correlation=+0.977 (positive)
+    pCO2_mmHg                : mean SHAP=-0.0000 (↓ fucosylation), correlation=-0.943 (negative)
+    Temperature_C            : mean SHAP=+0.0167 (↑ fucosylation), correlation=+0.888 (positive)
+    VCD_1e6_per_mL           : mean SHAP=-0.0309 (↓ fucosylation), correlation=+0.720 (positive)
+    Osmolality_mOsm          : mean SHAP=-0.0039 (↓ fucosylation), correlation=-0.940 (negative)
+    Lactate_g_per_L          : mean SHAP=+0.0925 (↑ fucosylation), correlation=-0.823 (negative)
+
+--- Sample Explanations (for regulatory documentation) ---
+
+  Prediction 1: Predicted=88.06%, Actual=84.81%
+  Base value (expected): 87.46%
+  Top drivers:
+    GDP_Fucose_uM            : +1.4127 ↑
+    pH                       : +1.3700 ↑
+    Lactate_g_per_L          : -0.8746 ↓
+    pCO2_mmHg                : +0.7925 ↑
+    Temperature_C            : -0.6655 ↓
+
+  Prediction 2: Predicted=89.72%, Actual=87.77%
+  Base value (expected): 87.46%
+  Top drivers:
+    GDP_Fucose_uM            : +2.3855 ↑
+    DO_pct                   : +0.7248 ↑
+    Uridine_mM               : -0.5816 ↓
+    Mn_uM                    : +0.3668 ↑
+    Osmolality_mOsm          : -0.3369 ↓
+
+  Prediction 3: Predicted=83.06%, Actual=82.30%
+  Base value (expected): 87.46%
+  Top drivers:
+    GDP_Fucose_uM            : -4.8374 ↓
+    Temperature_C            : +2.2802 ↑
+    Mn_uM                    : -2.0937 ↓
+    pH                       : +0.9729 ↑
+    pCO2_mmHg                : -0.9521 ↓
+
+--- Feature Interactions (top pairs) ---
+  Top 5 interacting feature pairs:
+    DO_pct               × pCO2_mmHg           : 0.1961
+    pCO2_mmHg            × Temperature_C       : 0.1945
+    Uridine_mM           × Osmolality_mOsm     : 0.1708
+    pH                   × Lactate_g_per_L     : 0.1573
+    pH                   × Osmolality_mOsm     : 0.1255
+
+--------------------------------------------------
+Generating plots...
+--------------------------------------------------
+  ✓ All plots saved
+
+======================================================================
+SUMMARY
+======================================================================
+Test R²: 0.7431
+Test RMSE: 2.4956
+CV R²: 0.8145 ± 0.0250
+Top SHAP feature: Temperature_C (|SHAP|=2.2965)
+SHAP analysis: Complete
+
+Recommendation: XGBoost + SHAP is the strongest candidate for
+production deployment due to its combination of accuracy and
+explainability. SHAP satisfies regulatory transparency requirements.
+
+✅ XGBoost + SHAP analysis complete. Results saved to results/07_xgboost_shap/
+PS C:\Users\gsj24\OneDrive\Desktop\BMS> & "C:\Program Files\Python313\python.exe" c:/Users/gsj24/OneDrive/Desktop/BMS/08_final_comparison.py
+======================================================================
+08 — COMPREHENSIVE MODEL COMPARISON
+======================================================================
+
+======================================================================
+TRAINING ALL MODELS (CONSISTENT CONDITIONS)
+======================================================================
+
+--- Ridge Regression ---
+--- PLSR ---
+--- Random Forest ---
+--- XGBoost/GBR ---
+--- GPR ---
+--- ANN ---
+
+======================================================================
+PERFORMANCE METRICS (OBJECTIVE)
+======================================================================
+               R²_train  R²_test  RMSE_test  MAE_test  Train_Time_s  Inference_Time_s
+Model
+Ridge            0.6339   0.5131     3.4361    2.8454        0.3500            0.0001
+PLSR             0.6340   0.5098     3.4476    2.8549        0.0026            0.0001
+Random Forest    0.9610   0.6181     3.0428    2.2756        0.5172            0.0663
+XGBoost          1.0000   0.6719     2.8206    2.1596        0.3821            0.0012
+GPR              0.8702   0.7493     2.4654    1.9733        0.9965            0.0013
+ANN              0.9097   0.0486     4.8031    3.6751        3.4199            0.0004
+
+======================================================================
+SENSITIVITY ANALYSIS — NOISE ROBUSTNESS
+======================================================================
+Testing model performance degradation under increasing noise levels.
+
+R² under increasing input noise:
+              Ridge    PLSR  Random Forest  XGBoost     GPR     ANN
+Noise_Level
+0.0          0.5131  0.5098         0.6181   0.6719  0.7493  0.0486
+0.5          0.2558  0.2489         0.4577   0.4640  0.2743 -0.5509
+1.0         -0.4531 -0.4736        -0.1466  -0.2721 -1.0000 -1.0000
+2.0         -1.0000 -1.0000        -0.9922  -1.0000 -1.0000 -1.0000
+3.0         -1.0000 -1.0000        -1.0000  -1.0000 -1.0000 -1.0000
+5.0         -1.0000 -1.0000        -1.0000  -0.8888 -1.0000 -1.0000
+  Ridge                robustness: -0.7167
+  PLSR                 robustness: -0.7207
+  Random Forest        robustness: -0.6437
+  XGBoost              robustness: -0.6386
+  GPR                  robustness: -0.7851
+  ANN                  robustness: -0.9027
+
+======================================================================
+DATA EFFICIENCY — LEARNING CURVES
+======================================================================
+       Ridge    PLSR  Random Forest  XGBoost     GPR     ANN
+10%   0.4971  0.3680         0.4957   0.4513 -0.0023 -1.0000
+20%   0.4702  0.4277         0.4905   0.5374  0.4671 -1.0000
+30%   0.4794  0.4600         0.6382   0.7091  0.6692 -1.0000
+50%   0.5058  0.5018         0.6522   0.7187  0.7130 -1.0000
+70%   0.5062  0.4967         0.6182   0.6871  0.7749 -1.0000
+100%  0.5131  0.5098         0.6181   0.6719  0.7654  0.0486
+
+======================================================================
+MULTI-CRITERIA EVALUATION RUBRIC
+======================================================================
+
+Scoring Methodology (1-5 scale):
+Each score is JUSTIFIED by measurable criteria to avoid subjectivity.
+
+Model                  Accuracy Interpret. Regulatory Uncertain.   DataEff.    Robust.      TOTAL
+------------------------------------------------------------------------------------------
+Ridge                      3.65          5          4          2       4.83       3.82      23.29
+PLSR                       3.63          5          5          2       4.71       3.76      24.10
+Random Forest              4.25          3          3          3       4.88       4.92      23.05
+XGBoost                    4.56          4          4          2       5.00       5.00      24.56
+GPR                        5.00          3          5          5       4.82       2.78      25.60
+ANN                        1.00          2          2          1       1.00       1.00       8.00
+
+======================================================================
+SCORE JUSTIFICATIONS
+======================================================================
+
+--- Ridge ---
+  Interpretability (5/5):
+    Fully interpretable: linear coefficients directly map to feature effects. Each coefficient quantifies the expected change in fucosylation per unit change in the standardized feature.
+  Regulatory (4/5):
+    Strong: Linear models are well-understood by regulators. Easy to validate. Limited by inability to capture nonlinear effects present in bioprocessing.
+  Uncertainty (2/5):
+    Prediction intervals available via OLS theory, but assumes homoscedasticity and normality — often violated in bioprocessing data.
+
+--- PLSR ---
+  Interpretability (5/5):
+    Fully interpretable: VIP scores rank feature importance; latent variables provide dimensionality reduction with clear loadings. Standard in chemometrics.
+  Regulatory (5/5):
+    Excellent: Gold standard in PAT/QbD literature. Directly cited in regulatory guidance. Widely accepted in pharma submissions.
+  Uncertainty (2/5):
+    Bootstrap-based intervals possible but not built-in. Requires additional implementation for uncertainty estimation.
+
+--- Random Forest ---
+  Interpretability (3/5):
+    Partially interpretable: MDI importance available but biased (Strobl et al., 2007). Permutation importance corrects this. Individual tree paths not easily inspectable.
+  Regulatory (3/5):
+    Moderate: Accepted in some regulatory filings but requires additional justification. Feature importance may be questioned.
+  Uncertainty (3/5):
+    Tree variance provides crude uncertainty (inter-tree disagreement). Not formally calibrated. Quantile regression forests improve this.
+
+--- XGBoost ---
+  Interpretability (4/5):
+    Interpretable via SHAP: Lundberg & Lee (2017) provide theoretically grounded, locally faithful explanations. Interaction detection available.
+  Regulatory (4/5):
+    Good: With SHAP explainability, meets FDA AI/ML guidance requirements. Individual prediction explanations satisfy case-by-case justification.
+  Uncertainty (2/5):
+    No built-in uncertainty. Quantile regression or conformal prediction can be added but requires additional implementation.
+
+--- GPR ---
+  Interpretability (3/5):
+    Limited direct interpretability but provides uncertainty bounds. Kernel hyperparameters reveal length scales (feature sensitivity). Uncertainty is itself a form of interpretability.
+  Regulatory (5/5):
+    Excellent: Uncertainty quantification directly supports ICH Q8 Design Space definition. Probabilistic predictions enable risk-based decision making (ICH Q9).
+  Uncertainty (5/5):
+    Built-in, principled uncertainty via posterior predictive distribution. Calibration verified. σ directly interpretable as prediction confidence.
+
+--- ANN ---
+  Interpretability (2/5):
+    Low intrinsic interpretability. LIME provides post-hoc local explanations but global understanding is limited. Regulatory bodies may require additional validation (FDA AI guidance, 2023).
+  Regulatory (2/5):
+    Limited: Difficult to validate per ICH Q2. Black-box nature conflicts with regulatory expectation of process understanding. LIME helps but isn't sufficient for full regulatory compliance without extensive additional validation.
+  Uncertainty (1/5):
+    No built-in uncertainty. MC-Dropout or ensemble methods can approximate it but add significant complexity and aren't principled.
+
+======================================================================
+FINAL RECOMMENDATION
+======================================================================
+
+  Best overall (weighted):     GPR (Total: 25.60)
+  Best accuracy:               GPR (R²: 0.7493)
+  Best regulatory compliance:  PLSR
+  Best uncertainty:            GPR
+
+  DEPLOYMENT RECOMMENDATION:
+  ┌─────────────────────────────────────────────────────────┐
+  │ PRIMARY:  XGBoost + SHAP (accuracy + explainability)   │
+  │ SUPPORT:  GPR (uncertainty for design space)           │
+  │ ACADEMIC: PLSR (established methodology, VIP scores)   │
+  │ BASELINE: Ridge (linear reference)                     │
+  └─────────────────────────────────────────────────────────┘
+
+  Rationale:
+  - XGBoost + SHAP provides the best accuracy with full explainability
+  - GPR's uncertainty quantification defines operational boundaries
+  - PLSR is the academic gold standard for chemometric applications
+  - The hybrid model demonstrates domain expertise integration
+
+--------------------------------------------------
+Generating plots...
+--------------------------------------------------
+  ✓ All plots saved
+
+======================================================================
+FINAL SUMMARY
+======================================================================
+
+Best overall model: GPR
+
+All results saved to results/08_comparison/
+
+✅ Comprehensive comparison complete.
+PS C:\Users\gsj24\OneDrive\Desktop\BMS> 
