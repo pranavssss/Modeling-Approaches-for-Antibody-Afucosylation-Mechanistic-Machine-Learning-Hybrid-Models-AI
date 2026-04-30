@@ -84,7 +84,7 @@ bms-pipeline/
 │   ├── main.py              ← FastAPI — ML pipeline + mounts auth routes
 │   ├── auth.py              ← Google OAuth + Email OTP + Gmail SMTP
 │   ├── requirements.txt
-│   └── .env                 ← All credentials (never commit)
+│   └── .env                 ← All credentials 
 │
 ├── frontend/
 │   ├── package.json
@@ -96,9 +96,10 @@ bms-pipeline/
 │       ├── index.js
 │       └── index.css
 │
-├── BMS Midterm Presentation.pdf
-├── Results and comparison (BMS1 VS BMS2).docx
-└── README.md
+├── BMS Midterm Presentation.pdf  ← Midterm Handoff
+├── Results and comparison (BMS1 VS BMS2).docx 
+├── README.md
+└── bms_platform_architecture.svg  
 ```
 
 ---
