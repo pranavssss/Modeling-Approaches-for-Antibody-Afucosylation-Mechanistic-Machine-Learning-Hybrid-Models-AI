@@ -103,7 +103,9 @@ bms-pipeline/
 │
 ├── BMS Dataset 1 (N=500)/                            ← Small-data regime (N=500), Data, Results, Models
 │
-└── BMS Dataset 2 (N=10,000)/                         ← Production-scale regime (N=10,000), Data, Results, Models
+├── BMS Dataset 2 (N=10,000)/                         ← Production-scale regime (N=10,000), Data, Results, Models
+│
+└── Final Project Report.pdf                          ← Final BMS Project 1 Report 
 
 ```
 
