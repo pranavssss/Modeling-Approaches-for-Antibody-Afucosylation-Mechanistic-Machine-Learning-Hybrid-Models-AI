@@ -109,7 +109,7 @@ bms-pipeline/
 │
 ├── Final Project Report.pdf                          ← Final BMS Project 1 Report
 │
-└── BMS Final Presentation.pdf                       ← Final Presentation Slides
+└── BMS Final Presentation.pdf                        ← Final Presentation Slides
 
 ```
 
