@@ -105,7 +105,9 @@ bms-pipeline/
 │
 ├── BMS Dataset 2 (N=10,000)/                         ← Production-scale regime (N=10,000), Data, Results, Models
 │
-└── Final Project Report.pdf                          ← Final BMS Project 1 Report 
+├── Final Project Report.pdf                          ← Final BMS Project 1 Report
+│
+└── BMS Final Presentation.pdf                       ← Final Presentation Slides
 
 ```
 
