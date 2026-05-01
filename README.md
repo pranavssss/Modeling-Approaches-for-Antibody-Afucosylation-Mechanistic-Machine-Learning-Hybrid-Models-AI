@@ -3,7 +3,7 @@
 > **BMS Hackathon** · MS Data Science · Rutgers University × Bristol Myers Squibb  
 > Built with ♥ by **Team Data Minds** — Sanjith Ganesh & Pranav Senthilkumaran
 
-🎬 **[Watch Demo Video](https://drive.google.com/file/d/14nySa7kebzUtQ6LPBRSOE7FV4xNMIuo5/view?usp=sharing)**
+🎬 **[Watch Full Pipeline Demo Video](https://drive.google.com/file/d/1eT48oYlrLJUvummd3mBHVD_xJhVTsP3w/view?usp=sharing)**
 
 A full-stack machine learning dashboard that predicts monoclonal antibody (mAb) fucosylation — a Critical Quality Attribute in biopharmaceutical manufacturing — from CHO cell culture bioprocess variables.
 
