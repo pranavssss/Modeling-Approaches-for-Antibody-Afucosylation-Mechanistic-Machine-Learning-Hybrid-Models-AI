@@ -98,18 +98,13 @@ bms-pipeline/
 │       ├── index.js
 │       └── index.css
 │
-├── BMS Midterm Presentation.pdf  ← Midterm Handoff
-├── Results and comparison (BMS1 VS BMS2).docx
 ├── README.md
 ├── bms_platform_architecture.svg
 │
 ├── BMS Dataset 1 (N=500)/                            ← Small-data regime (N=500), Data, Results, Models
 │
-├── BMS Dataset 2 (N=10,000)/                         ← Production-scale regime (N=10,000), Data, Results, Models
-│
-├── Final Project Report.pdf                          ← Final BMS Project 1 Report
-│
-└── BMS Final Presentation.pdf                        ← Final Presentation Slides
+└── BMS Dataset 2 (N=10,000)/                         ← Production-scale regime (N=10,000), Data, Results, Models
+
 
 ```
 
